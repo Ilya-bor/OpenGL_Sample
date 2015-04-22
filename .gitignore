@@ -1,0 +1,15 @@
+
+/Debug
+/Release
+/Smaple/Debug
+/Smaple/Release
+/ipch
+*.vcproj*user
+*.vcxproj*user
+*.csproj*user
+*.ncb
+*.suo
+*.sdf
+*.opensdf
+*.ipch
+*.aps
