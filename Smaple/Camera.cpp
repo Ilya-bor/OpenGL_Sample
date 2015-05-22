@@ -34,7 +34,7 @@ void Camera::SetRange(float renge)
 {
    this->range = range;
 }
-void Camera::Setup(float displayWidth, float displayHeight)
+void Camera::Setup(float displayWidth, float displayHeight, Vector3 CnSphere)
 {
     float cosPhi = cosf(azimuthalAngle * PI / 180);
     float sinPhi = sinf(azimuthalAngle * PI / 180);
@@ -43,10 +43,10 @@ void Camera::Setup(float displayWidth, float displayHeight)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60, displayWidth / displayHeight, 0, 400);
-    gluLookAt(position.X, position.Y, position.Z,position.X-range*cosTheta*sinPhi,position.Y-range*sinTheta,position.Z-range*cosTheta*cosPhi, 0, 1, 0);
+    gluPerspective(30, displayWidth / displayHeight, 1.0, 2000);
+    gluLookAt(CnSphere.X + range*cosTheta*sinPhi,CnSphere.Y + range*sinTheta,CnSphere.Z + range*cosTheta*cosPhi,CnSphere.X, CnSphere.Y,CnSphere.Z, 0, 1, 0);
     glMatrixMode(GL_MODELVIEW);
-    
+   // position.X-range*cosTheta*sinPhi,position.Y-range*sinTheta,position.Z-range*cosTheta*cosPhi
 }
 Vector3 Camera::GetPosition()
 {
@@ -55,4 +55,21 @@ Vector3 Camera::GetPosition()
 void Camera::SetPosition(Vector3 position)
 {
     this->position = position;
+}
+Vector3 Camera::GetOrientation()
+{
+    float cosPhi = cosf(azimuthalAngle * PI / 180);
+    float sinPhi = sinf(azimuthalAngle * PI / 180);
+    float cosTheta = cosf(zenithAngle * PI / 180);
+    float sinTheta = sinf(zenithAngle * PI / 180);
+    Vector3 Res(0,0,0);
+    Res.X = -range*cosTheta*sinPhi;
+    Res.Z = -range*cosTheta*cosPhi;
+    float Norm  = 0.0;
+    Norm = (Res.X)*(Res.X)+(Res.Y)*(Res.Y)+(Res.Z)*(Res.Z);
+    Norm = pow((double)Norm,0.5);
+    Res.X = Res.X/Norm;
+    Res.Y = Res.Y/Norm;
+    Res.Z = Res.Z/Norm;
+    return Res;
 }

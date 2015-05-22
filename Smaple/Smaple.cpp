@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include "Camera.h"
 #include "Cube.h"
-
+#include "Sphere.h"
 
 #define PI 3.14159265
-#define AZIMUTHAL_INC 0.3
-#define ZENITH_INC 0.3
+#define AZIMUTHAL_INC 0.5
+#define ZENITH_INC 0.5
 #define MOVING_INC 0.1
 #define MOVING_TIME 10
 
@@ -30,45 +30,124 @@ bool upPressed;
 bool rightPressed;
 bool downPressed;
 bool leftPressed;
+
+Vector3 cent = Vector3(0,0,0); 
+Vector3 cent1 = Vector3(0,10,-100); 
+Vector3 n1 = Vector3(0,1,0);
+Vector3 s1 = Vector3(1,0,0);
+Vector3 s2 = Vector3(0,0,0);
+Vector3 st = Vector3(10,10,5);
+Vector3 DifSp(0.0,0.0,0.0);
+Cube L1(cent,n1,s1,st,30,50);
+Sphere S1(cent1,s2,90,10);
+
 void display()
 {
- 
- camera.Setup(displayWidth, displayHeight);
+ cent1 = S1.GetCentr();
+ camera.Setup(displayWidth, displayHeight, cent1);
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
     glColor3f(1.0, 1.0, 0.0);
-    glPushMatrix();
-    glTranslatef(-30, -10, -10);
-    glRotatef(180, 0, 1, 0);
+  /*  glPushMatrix();
+   // glTranslatef(-30, -10, -10);
+  //  glRotatef(180, 0, 1, 0);
     glutSolidCube(20);
+    glPopMatrix();*/
+   
+    //L1.ShowCube();
+  /*  glPushMatrix();
+    Vector3 centr1 = L1.GetCentr();
+    float size1 = L1.GetSize();
+    glTranslatef(centr1.X, size1/2, centr1.Z);
+    glutSolidCube(size1);
     glPopMatrix();
 
+    glColor3f(1.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslatef(-20, 0, 10);
-    glutSolidSphere(10,100,100);
-    glPopMatrix();
- 
+    Vector3 centr = S1.GetCentr();
+    float size = S1.GetSize();
+    glTranslatef(centr.X, cent1.Y, centr.Z);
+    glutSolidSphere(size,50,50);
+    glPopMatrix();*/
+  
+    float sp = 1;
+    Vector3 CnSpere = S1.GetCentr();
+    Vector3 Speed = S1.GetSpeed();
+    Speed.X = Speed.X*sp;
+    Speed.Y = Speed.Y*sp;
+    Speed.Z = Speed.Z*sp;
+    
+     int i  = 1;
+     float spSize = S1.GetSize();
+     float spWeight = S1.GetWeight();
+     if (L1.CrashPoint(CnSpere,Speed,spSize) == 1)
+    {
+      i = 1;
+    }
+    else
+    {
+        L1.MoveCube(Speed,spWeight,0);
+        S1.MoveSphere(DifSp,100,L1.GetWeight(),L1.GetCrashNormal());
+        glPushMatrix();
+        Vector3 centr1 = L1.GetCentr();
+        float size1 = L1.GetSize();
+        glTranslatef(centr1.X, size1/2, centr1.Z);
+        glutSolidCube(size1);
+        glPopMatrix();
+
+        glColor3f(1.0, 0.0, 0.0);
+        glPushMatrix();
+        Vector3 centr = S1.GetCentr();
+        float size = S1.GetSize();
+        glTranslatef(centr.X, cent1.Y, centr.Z);
+        glutSolidSphere(size,50,50);
+        glPopMatrix();
+        i =0;
+    }
+   if ((i == 1)&&(L1.ControlMove() == 1))
+    {
+        
+        L1.MoveCube(Speed,spWeight,1);
+        S1.MoveSphere(DifSp,L1.GetCrashAngle(),L1.GetWeight(),L1.GetCrashNormal());
+        glPushMatrix();
+        Vector3 centr1 = L1.GetCentr();
+        float size1 = L1.GetSize();
+        glTranslatef(centr1.X, size1/2, centr1.Z);
+        glutSolidCube(size1);
+        glPopMatrix();
+
+        glColor3f(1.0, 0.0, 0.0);
+        glPushMatrix();
+        Vector3 centr = S1.GetCentr();
+        float size = S1.GetSize();
+        glTranslatef(centr.X, size, centr.Z);
+        glutSolidSphere(size,50,50);
+        glPopMatrix();
+        i = 1;
+    }
+    else
+    {
+        i =0;
+    }
     glBegin(GL_LINES);
     glColor3f(1.0,1.0,1.0);
-    glVertex3f(-200,0,0);
-    glVertex3f(100,0,0);
-    glColor3f(1.0,1.0,0.0);
-    glVertex3f(0,200,0);
-    glVertex3f(0,-100,0);
+    glVertex3f(-300,0,0);
+    glVertex3f(800,0,0);
     glColor3f(1.0,0.0,0.0);
-    glVertex3f(0,0,50);
-    glVertex3f(0,0,-200);
+    glVertex3f(0,0,800);
+    glVertex3f(0,0,-300);
     glEnd();
- /* glPushMatrix();
-  glColor3f(0.0, 1.0, 1.0);
-  glTranslatef(-10, -10, 20);
-  glRotatef(180, 0, 1, 0);
-  glScalef(1.5, 0.5, 0.5);
-  glutSolidCube(20);
-  glPopMatrix();*/
-  glutSwapBuffers();
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,1.0);
+    glVertex3f(-2000.0,0.0,-2000.0);
+    glVertex3f(-2000.0,0.0,2000.0);
+    glVertex3f(2000.0,0.0,2000.0);
+    glVertex3f(2000.0,0.0,-2000.0);
+    glEnd();
+    DifSp = Vector3(0.0,0.0,0.0);
+    glutSwapBuffers();
   
 }
 void reshape(int w, int h)
@@ -88,14 +167,14 @@ int main(int argc, char* argv[])
     rightPressed = false;
     downPressed = false;
     leftPressed = false;
-    camera.SetPosition( Vector3(50, 15, 40) );
+    camera.SetPosition( Vector3(cent1.X, 30,cent1.Z - 50) );
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB |GLUT_DEPTH);
     glutInitWindowSize(500.0, 500.0);
     glutInitWindowPosition(0, 0);
     glutCreateWindow("Test");
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    //glutSetCursor(GLUT_CURSOR_NONE); 
+    glutSetCursor(GLUT_CURSOR_NONE); 
     glutIgnoreKeyRepeat(1); 
     glutDisplayFunc(display); 
     glutReshapeFunc(reshape); 
@@ -108,11 +187,11 @@ int main(int argc, char* argv[])
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
-    
+    glDepthFunc(GL_LEQUAL);
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
+   // glDepthMask(false);
     GLfloat ambient[] = {  0.2f, 0.2f, 0.2f, 1 };
     GLfloat diffuse[] = {0.5f, 0.2f, 0.2f, 1 };
     GLfloat spec[] = { 0.8f, 0.8f, 0.8f,0.4 };
@@ -209,30 +288,40 @@ void Moving(int timerValue)
         float azimuthalAngle = camera.GetAzimuthalAngle() * PI / 180;
         float zenithAngle = camera.GetZenithAngle() * PI / 180;
         Vector3 cameraPosition = camera.GetPosition();
+        DifSp = Vector3(0.01,0.0,0.01);
         if (upPressed)
         {
             cameraPosition.Z -= (MOVING_INC*cosf(zenithAngle)) * cosf(azimuthalAngle);
             cameraPosition.X -= (MOVING_INC*cosf(zenithAngle)) * sinf(azimuthalAngle);
             cameraPosition.Y -= MOVING_INC*sinf(zenithAngle);
+            DifSp.X = -DifSp.X*sinf(azimuthalAngle);
+            DifSp.Z = -DifSp.Z*cosf(azimuthalAngle);
         }
         if (rightPressed)
         {
             cameraPosition.X += MOVING_INC * sinf((PI-2*azimuthalAngle)/2);
             cameraPosition.Z -= MOVING_INC * cosf((PI-2*azimuthalAngle)/2);
+            DifSp.X = DifSp.X*cosf(azimuthalAngle);
+            DifSp.Z = -DifSp.Z*sinf(azimuthalAngle);
         }
         if (downPressed)
         {
             cameraPosition.Z += (MOVING_INC*cosf(zenithAngle)) * cosf(azimuthalAngle);
             cameraPosition.X += (MOVING_INC*cosf(zenithAngle)) * sinf(azimuthalAngle);
             cameraPosition.Y += MOVING_INC*sinf(zenithAngle);
+            DifSp.X = DifSp.X*sinf(azimuthalAngle);
+            DifSp.Z = DifSp.Z*cosf(azimuthalAngle);
         }
         if (leftPressed)
         {
             cameraPosition.X -= MOVING_INC * sinf((PI-2*azimuthalAngle)/2);
             cameraPosition.Z += MOVING_INC * cosf((PI-2*azimuthalAngle)/2);
+            DifSp.X = -DifSp.X*cosf(azimuthalAngle);
+            DifSp.Z = DifSp.Z*sinf(azimuthalAngle);
         }
-        camera.SetPosition(cameraPosition);
-        glutPostRedisplay(); //repaint
+        //camera.SetPosition(cameraPosition);
+         //repaint
     }
+    glutPostRedisplay();
     glutTimerFunc(MOVING_TIME, Moving, 0); //функция по таймеру
 }
