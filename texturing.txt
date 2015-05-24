@@ -1,0 +1,17 @@
+unsigned char* crownTexture = SOIL_load_image(".\\textures\\crown.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+unsigned int crownTextureID;
+glGenTextures(1, &crownTextureID);
+glBindTexture(GL_TEXTURE_2D, crownTextureID);
+glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, crownTexture);
+
+glEnable(GL_TEXTURE_2D);
+glColor3f(1, 1, 1);
+glBindTexture(GL_TEXTURE_2D, trunkTextureID);
+GLUquadric* quadric = gluNewQuadric();
+gluQuadricTexture(quadric, GL_TRUE);
+gluSphere(quadric, radius, slices, stacks);
+gluDeleteQuadric(quadric);
+glDisable(GL_TEXTURE_2D);
