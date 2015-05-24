@@ -40,6 +40,10 @@ float Cube::GetCrashAngle()
 {
     return Crangle;
 }
+float Cube::GetCrashRotate()
+{
+    return CrashRotate;
+}
 void Cube::SetCentr(Vector3 centr)
 {
     this->centr = centr;
@@ -367,6 +371,7 @@ int Cube::CrashPoint(Vector3 CnSphere, Vector3 Sp, float SpSize)
     res.Y = 0;
     res.Z = tmp.Z - CnSphere.Z;
     float Norm = GetNorm(res);
+    Vector3 Rt1, Rt2;
     if((Norm*sinf((PI - Crangle)/2)) > (SpSize + 0.01))
     {
         res.X -= Sp.X;
@@ -374,7 +379,17 @@ int Cube::CrashPoint(Vector3 CnSphere, Vector3 Sp, float SpSize)
         Norm = GetNorm(res);
     }
     else
+    {
+        Rt1.X = TP[CrashSide-1].X-CnSphere.X;
+        Rt1.Y = 0;
+        Rt1.Z = TP[CrashSide-1].Z-CnSphere.Z;
+        Rt2.X = TP[CrashSide].X-CnSphere.X;
+        Rt2.Y = 0;
+        Rt2.Z = TP[CrashSide].Z-CnSphere.Z;
+        CrashRotate = GetNorm(Rt1) - GetNorm(Rt2);
         return 1;
+    }
+        
     return 0;
     
 }
@@ -420,6 +435,12 @@ void Cube::MoveCube(Vector3& Speed, float BallWeight, int flag)
         CbSpeed.Z = Speed.Z*CbSp;
         centr.X += CbSpeed.X;
         centr.Z += CbSpeed.Z;
+        float CosCR = cosf(CrashRotate);
+        float SinCR = sinf(CrashRotate);
+        Vector3 oldS1 = S1normal;
+        S1normal.X = (oldS1.X*CosCR - oldS1.Z*SinCR);
+        S1normal.Z = (oldS1.X*SinCR + oldS1.Z*CosCR);
+        SetupNormales();
         //ShowCube();
         SetPoints();
     }

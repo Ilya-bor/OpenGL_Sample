@@ -28,7 +28,19 @@ void Camera::SetAzimuthalAngle(float azimuthalAngle)
 }
 void Camera::SetZenithAngle(float zenithAngle)
 {
-    this->zenithAngle = zenithAngle;
+    if(zenithAngle > 70)
+    {
+        this->zenithAngle = 70;
+    }
+    else
+        if(zenithAngle < 3)
+        {
+            this->zenithAngle = 3;
+        }
+        else
+        {
+            this->zenithAngle = zenithAngle;
+        }
 }
 void Camera::SetRange(float renge)
 {
@@ -43,7 +55,7 @@ void Camera::Setup(float displayWidth, float displayHeight, Vector3 CnSphere)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(30, displayWidth / displayHeight, 1.0, 2000);
+    gluPerspective(50, (displayWidth / displayHeight), 1.0, 9000);
     gluLookAt(CnSphere.X + range*cosTheta*sinPhi,CnSphere.Y + range*sinTheta,CnSphere.Z + range*cosTheta*cosPhi,CnSphere.X, CnSphere.Y,CnSphere.Z, 0, 1, 0);
     glMatrixMode(GL_MODELVIEW);
    // position.X-range*cosTheta*sinPhi,position.Y-range*sinTheta,position.Z-range*cosTheta*cosPhi

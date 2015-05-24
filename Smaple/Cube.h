@@ -15,6 +15,7 @@ private:
     int CrashSide; 
     float Crangle;
     Vector3 CrashNormal;
+    float CrashRotate;
 public:
     Cube(Vector3& startCentr = Vector3(0,0,0), Vector3& startVnormal = Vector3(0,1,0), 
         Vector3& startSnormal = Vector3(1,0,0),Vector3& startSpeed = Vector3(10,10,5), float startWeight = 20, int startSize = 10);
@@ -23,6 +24,7 @@ public:
     Vector3 GetS1normal();
     float GetWeight();
     int GetSize();
+    float GetCrashRotate();
     void SetCentr(Vector3 Centr);
     void SetVnormal(Vector3 VNormal);
     void SetS1normal(Vector3 S1Normal);

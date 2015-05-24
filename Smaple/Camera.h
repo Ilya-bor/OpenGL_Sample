@@ -8,7 +8,7 @@ private:
     float zenithAngle;
     float range;
 public:
-    Camera(Vector3& startPosition = Vector3(0, 0, 0), float startAzimuthalAngle = 180, float startZenithAngle = 15, float range = 300.0);
+    Camera(Vector3& startPosition = Vector3(0, 0, 0), float startAzimuthalAngle = 180, float startZenithAngle = 25, float range = 400.0);
     float GetAzimuthalAngle();
     float GetZenithAngle();
     float GetRange();

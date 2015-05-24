@@ -2,6 +2,7 @@
 #include "Sphere.h"
 #include <windows.h>
 #include <GL/glut.h>
+#include <GL/SOIL.h>
 #include <math.h>
 
 
@@ -10,6 +11,7 @@
 Sphere::Sphere(Vector3& startCentr, Vector3& stratSpeed, float stratWeight, float stratSize):
 centr(startCentr), spSpeed(stratSpeed), weight(stratWeight), size(stratSize)
 {
+	
 
 }
 Vector3 Sphere::GetCentr()
@@ -42,8 +44,8 @@ void Sphere::MoveSphere(Vector3 DifSpeed, float Crangle, float CubeWeight, Vecto
     {
         if ((DifSpeed.X == 0)&&(DifSpeed.Z == 0))
         {
-            spSpeed.X = 0.99*spSpeed.X;
-            spSpeed.Z = 0.99*spSpeed.Z;
+            spSpeed.X = 0.999*spSpeed.X;
+            spSpeed.Z = 0.999*spSpeed.Z;
         }
         spSpeed.X += DifSpeed.X;
         spSpeed.Z += DifSpeed.Z;
