@@ -93,6 +93,7 @@ void Cube::Normalize(Vector3& UnNorm)
 }
 void Cube::CrashAngle(Vector3 Speed, Vector3 CnSphere, int& CrashSide, float& Crangle, float SpSize)
 {
+    CrashSide = 5;
     Normalize(Speed);
     float scalar[5];
     scalar[1] = Scalar(Speed,SN[1]);
@@ -435,12 +436,12 @@ void Cube::MoveCube(Vector3& Speed, float BallWeight, int flag)
         CbSpeed.Z = Speed.Z*CbSp;
         centr.X += CbSpeed.X;
         centr.Z += CbSpeed.Z;
-        float CosCR = cosf(CrashRotate);
+      /*  float CosCR = cosf(CrashRotate);
         float SinCR = sinf(CrashRotate);
         Vector3 oldS1 = S1normal;
         S1normal.X = (oldS1.X*CosCR - oldS1.Z*SinCR);
         S1normal.Z = (oldS1.X*SinCR + oldS1.Z*CosCR);
-        SetupNormales();
+        SetupNormales();*/
         //ShowCube();
         SetPoints();
     }
@@ -451,8 +452,8 @@ void Cube::MoveCube(Vector3& Speed, float BallWeight, int flag)
             centr.X += CbSpeed.X;
             CbSpeed.Y = 0;
             centr.Z += CbSpeed.Z;
-            CbSpeed.X = CbSpeed.X*0.9;
-            CbSpeed.Z = CbSpeed.Z*0.9;
+            CbSpeed.X = CbSpeed.X*0.95;
+            CbSpeed.Z = CbSpeed.Z*0.95;
            // ShowCube();
             SetPoints();
         }

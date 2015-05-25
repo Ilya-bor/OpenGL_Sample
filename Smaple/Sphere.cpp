@@ -47,10 +47,44 @@ void Sphere::MoveSphere(Vector3 DifSpeed, float Crangle, float CubeWeight, Vecto
             spSpeed.X = 0.999*spSpeed.X;
             spSpeed.Z = 0.999*spSpeed.Z;
         }
-        spSpeed.X += DifSpeed.X;
-        spSpeed.Z += DifSpeed.Z;
-        centr.X += spSpeed.X;
-        centr.Z += spSpeed.Z;
+        if(GetNorm(spSpeed)<0.001)
+        {
+            spSpeed.X = spSpeed.X*10;
+            spSpeed.Z = spSpeed.Z*10;
+        }
+        Vector3 oldSpeed = spSpeed;
+        oldSpeed.X = -oldSpeed.X;
+        oldSpeed.Z = -oldSpeed.Z;
+        
+        if((abs(centr.X)>2810)&&(abs(centr.Z)>2810))
+        {
+            
+            spSpeed.X = -spSpeed.X*0.85;
+            spSpeed.Z = -spSpeed.Z*0.85;
+            centr.X += spSpeed.X;
+            centr.Z += spSpeed.Z;
+        }
+        else
+        {
+            if((abs(centr.X)>2810)||(abs(centr.Z)>2810))
+            {
+                float CosAngl = cosf(45);
+                float SinAngl = sinf(45);
+                spSpeed.X = (oldSpeed.X*CosAngl + oldSpeed.Z*SinAngl)*0.85;
+                spSpeed.Z = (-oldSpeed.X*SinAngl + oldSpeed.Z*CosAngl)*0.85;
+                centr.X += spSpeed.X;
+                centr.Z += spSpeed.Z;
+            }
+            else
+            {
+                spSpeed.X += DifSpeed.X;
+                spSpeed.Z += DifSpeed.Z;
+                centr.X += spSpeed.X;
+                centr.Z += spSpeed.Z;
+            }
+            
+        }
+        
        // ShowSphere();
     }
     else
@@ -83,6 +117,7 @@ void Sphere::MoveSphere(Vector3 DifSpeed, float Crangle, float CubeWeight, Vecto
         spSpeed.Z = (-k*oldSpeed.X*SinAngl + oldSpeed.Z*CosAngl)*newSpeed;
         centr.X += spSpeed.X;
         centr.Z += spSpeed.Z;
+        
        // ShowSphere();
     }
     

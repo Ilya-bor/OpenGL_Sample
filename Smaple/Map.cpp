@@ -24,7 +24,22 @@ int Map::GetIJ(int i, int j)
 }
 void Map::SetCube(int i, int j, int num)
 {
-	this-> map[i][j] = num;
+    if(this-> map[i][j] == -1)
+    {
+        this-> map[i][j] = num;
+    }
+    else
+    {
+        if ((i != 80)&&(this-> map[i+1][j] == -1))
+        {
+            this-> SetCube(i+1,j,num); 
+        }
+        else
+        {
+            this-> SetCube(i,j+1,num);
+        }
+    }
+	
 }
 int** Map::GetObj(Vector3 CnSphere)
 {
@@ -38,10 +53,10 @@ int** Map::GetObj(Vector3 CnSphere)
 			Res[u][y] = -1;
 		}
 	}
-	CnSphere.X += 4000*pow(2,0.5);
-	CnSphere.Z += 4000*pow(2,0.5);
-	int i = (CnSphere.X/(100*pow(2,0.5))) + 1;
-	int j = (CnSphere.Z/(100*pow(2,0.5))) + 1;
+	CnSphere.X += 4000/pow(2,0.5);
+	CnSphere.Z += 4000/pow(2,0.5);
+	int i = (CnSphere.X*pow(2,0.5)/100) + 1;
+	int j = (CnSphere.Z*pow(2,0.5)/100) + 1;
 	int h = 0;
 	int l = 0;
 	for(int u = i-1; u<i+2; u++)
@@ -54,5 +69,5 @@ int** Map::GetObj(Vector3 CnSphere)
 		h++;
 		l = 0;
 	}
-	return = Res;
+	return  Res;
 }
